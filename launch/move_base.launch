@@ -1,18 +1,29 @@
-<launch>
-<!-- move_base -->
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <rosparam file="$(find ir_avoidance_simulator)/config/fake/costmap_common_params.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find ir_avoidance_simulator)/config/fake/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find ir_avoidance_simulator)/config/fake/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find ir_avoidance_simulator)/config/fake/global_costmap_params.yaml" command="load" />
-    <rosparam file="$(find ir_avoidance_simulator)/config/fake/base_local_planner_params.yaml" command="load" />
-    <remap from="/cmd_vel" to="/andbot/cmd_vel"/>
-    <remap from="/odom" to="/andbot/odom_diffdrive"/>
+<?xml version="1.0"?>
 
+
+<launch>
+
+  <!-- Run the map server  -->
+<!--
+  <node name="map_server" pkg="map_server" type="map_server" args="/home/kkuei/catkin_ws/src/ir_avoidance_simulator/my_map2.yaml"/>
+
+-->
+
+  <!-- Run Amcl -->
+<!--
+  <node pkg="amcl" type="amcl" name="amcl" output="screen" />
+-->
+
+  <!-- Run Move Base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find ir_avoidance_simulator)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find ir_avoidance_simulator)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find ir_avoidance_simulator)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find ir_avoidance_simulator)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find ir_avoidance_simulator)/config/base_local_planner_params.yaml" command="load" />
+    <remap from="/cmd_vel" to="/andbot/cmd_vel"/>
   </node>
 
-<!-- Run a static transform between /odom and /map -->
-  <node name="map_odom_broadcaster" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 /map /odom 100" />
 
 
 </launch>
