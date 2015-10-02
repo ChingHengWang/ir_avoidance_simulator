@@ -1,0 +1,18 @@
+#!/bin/bash
+
+my_pid=$$
+echo "My process ID is $my_pid"
+
+echo "Launching gazebo_nav.launch"
+roslaunch ir_avoidance_simulator gazebo_nav.launch &
+sleep 6s
+pid="$pid $!"
+
+
+echo "rviz"
+rosrun rviz rviz -d `rospack find ir_avoidance_simulator`/ir_avoidance_simulator.rviz &
+
+
+trap "echo Killing all processes.; kill -2 TERM $pid; exit" SIGINT SIGTERM
+
+
