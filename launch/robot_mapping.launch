@@ -9,6 +9,7 @@
     <param name="odom_frame" value="odom"/>
     <param name="map_update_interval" value="10"/>
 
-    <remap from="scan" to="$(arg scan_topic)"/>
+    <!--<remap from="scan" to="$(arg scan_topic)"/>
+-->  
   </node>
 </launch>
