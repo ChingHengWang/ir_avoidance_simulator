@@ -106,7 +106,6 @@ include_directories(
 ## Declare a cpp executable
 # add_executable(ir_avoidance_simulator_node src/ir_avoidance_simulator_node.cpp)
 
-
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(ir_avoidance_simulator_node ir_avoidance_simulator_generate_messages_cpp)
@@ -115,6 +114,14 @@ include_directories(
 # target_link_libraries(ir_avoidance_simulator_node
 #   ${catkin_LIBRARIES}
 # )
+
+
+add_executable(rotate_laser src/rotate_laser.cpp)
+target_link_libraries(rotate_laser ${catkin_LIBRARIES})
+
+add_executable(laser_cmd_step src/laser_cmd_step.cpp)
+target_link_libraries(laser_cmd_step ${catkin_LIBRARIES})
+
 
 #############
 ## Install ##
