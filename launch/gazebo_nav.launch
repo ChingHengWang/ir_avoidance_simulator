@@ -46,6 +46,7 @@
     output="screen" ns="/andbot"
     args="joint_state_controller
          laser_position_controller
+	 ir_up_position_controller
          leftWheel_effort_controller
          rightWheel_effort_controller"
   />
