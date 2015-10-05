@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
+<!--before install IR andbot-->
+
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="andbot">
   <xacro:property name="PI" value="3.1415926535897931"/>
   <xacro:property name="length_wheel" value="0.0254"/>
@@ -16,6 +18,225 @@
     <parent link="base_footprint"/>
     <child link="base_link"/>
   </joint>
+
+<!-- Testing for IR obstacle avoidance-->
+<!-- Testing for IR obstacle avoidance-->
+<!-- Testing for IR obstacle avoidance-->
+<!-- Testing for IR obstacle avoidance-->
+
+
+<!-- ir_up plugin -->
+  <gazebo reference="ir_up">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <material>Gazebo/Yellow</material>
+    <sensor type="ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>100</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>3</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.001</min_angle>
+            <!-- -0.0174532925 -->
+            <max_angle>0.001</max_angle>
+            <!-- 0.0174532925 -->
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>3.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+		       achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+		       stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+		       reading. -->
+          <mean>0.0</mean>
+          <stddev>0.00</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>ir_up_dist</topicName>
+        <frameName>ir_up</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+
+  <!-- Body link /ir Link joint -->
+  <joint name="ir_up_joint" type="continuous">
+    <parent link="body_link"/>
+    <child link="ir_up"/>
+    <origin xyz="${0.145/2} 0 ${0.875-0.029}" rpy="3.14 ${1.57/2} 0"/>
+    <axis xyz="0 0 1"/>
+          <limit upper="1.57" lower="-1.57" velocity="10" effort="7"/>
+	  <joint_properties damping="0.0" friction="0.0"/> 
+
+  </joint>
+  <!-- Transmission for ir_up joint -->
+  <transmission name="ir_up_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ir_up_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="ir_up_Motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalWhiteuction>1</mechanicalWhiteuction>
+    </actuator>
+  </transmission>
+
+
+
+  <!-- IR_UP link -->
+  <link name="ir_up">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.04" radius="0.01"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.04" radius="0.01"/>
+      </geometry>
+       <material name="Yellow">
+         <color rgba="1 1 0 1"/>
+       </material>
+
+
+    </visual>
+    <inertial>
+      <mass value="0.002"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="ir_up">
+    <mu1 value="5.0"/>
+    <mu2 value="5.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+  </gazebo>
+
+
+<!-- ir_down plugin -->
+  <gazebo reference="ir_down">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <material>Gazebo/Yellow</material>
+    <sensor type="ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>100</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>3</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.001</min_angle>
+            <!-- -0.0174532925 -->
+            <max_angle>0.001</max_angle>
+            <!-- 0.0174532925 -->
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.10</min>
+          <max>3.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise parameters based on published spec for Hokuyo laser
+		       achieving "+-30mm" accuracy at range < 10m.  A mean of 0.0m and
+		       stddev of 0.01m will put 99.7% of samples within 0.03m of the true
+		       reading. -->
+          <mean>0.0</mean>
+          <stddev>0.00</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+        <topicName>ir_down_dist</topicName>
+        <frameName>ir_down</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+
+  <!-- Body link /ir Link joint -->
+  <joint name="ir_down_joint" type="continuous">
+    <parent link="body_link"/>
+    <child link="ir_down"/>
+    <origin xyz="${0.145/2} 0 ${0.275-0.029}" rpy="3.14 ${-1.57/2} 0"/>
+    <axis xyz="0 0 1"/>
+          <limit upper="1.57" lower="-1.57" velocity="10" effort="7"/>
+	  <joint_properties damping="0.0" friction="0.0"/> 
+
+  </joint>
+  <!-- Transmission for ir_down joint -->
+  <transmission name="ir_down_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="ir_down_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="ir_down_Motor">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalWhiteuction>1</mechanicalWhiteuction>
+    </actuator>
+  </transmission>
+
+
+
+  <!-- ir_down link -->
+  <link name="ir_down">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.04" radius="0.01"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.04" radius="0.01"/>
+      </geometry>
+       <material name="Yellow">
+         <color rgba="1 1 0 1"/>
+       </material>
+
+
+    </visual>
+    <inertial>
+      <mass value="0.002"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="0.01"/>
+    </inertial>
+  </link>
+  <gazebo reference="ir_down">
+    <mu1 value="5.0"/>
+    <mu2 value="5.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+  </gazebo>
+
+
+
+
+
+
+
+<!-- End of Testing for IR obstacle avoidance-->
+
+<!-- End of Testing for IR obstacle avoidance-->
+
+<!-- End of Testing for IR obstacle avoidance-->
 
   <!-- Head link -->
   <link name="head_link">
@@ -44,17 +265,17 @@
     <material>Gazebo/White</material>
   </gazebo>
 
-  <!-- Base link /Head Link joint -->
+  <!-- Body link /Head Link joint -->
   <joint name="head_joint" type="continuous">
-    <parent link="base_link"/>
+    <parent link="body_link"/>
     <child link="head_link"/>
-    <origin xyz="-0.145 0 1.075" rpy="0 0 0"/>
+    <origin xyz="-0.145 0 ${1.075-0.029}" rpy="0 0 0"/>
     <axis xyz="0 0 1"/>
           <limit upper="1.57" lower="-1.57" velocity="10" effort="7"/>
 	  <joint_properties damping="0.0" friction="0.0"/> 
 
   </joint>
-  <!-- Transmission for laser joint -->
+  <!-- Transmission for head joint -->
   <transmission name="head_trans">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="head_joint">
