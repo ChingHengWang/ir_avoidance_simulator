@@ -122,8 +122,13 @@ target_link_libraries(rotate_laser ${catkin_LIBRARIES})
 add_executable(laser_cmd_step src/laser_cmd_step.cpp)
 target_link_libraries(laser_cmd_step ${catkin_LIBRARIES})
 
-add_executable(rotate_ir src/rotate_ir.cpp)
-target_link_libraries(rotate_ir ${catkin_LIBRARIES})
+add_executable(rotate_ir_up src/rotate_ir_up.cpp)
+target_link_libraries(rotate_ir_up ${catkin_LIBRARIES})
+
+add_executable(rotate_ir_down src/rotate_ir_down.cpp)
+target_link_libraries(rotate_ir_down ${catkin_LIBRARIES})
+add_executable(rotate_ir_up_P src/rotate_ir_up_P.cpp)
+target_link_libraries(rotate_ir_up_P ${catkin_LIBRARIES})
 
 
 #############

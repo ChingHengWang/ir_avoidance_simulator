@@ -45,9 +45,10 @@
     type="spawner" respawn="false"
     output="screen" ns="/andbot"
     args="joint_state_controller
-         laser_position_controller
-	 ir_up_position_controller
-         leftWheel_effort_controller
+	 laser_position_controller
+	 ir_up_velocity_controller
+ 	 ir_down_velocity_controller
+	 leftWheel_effort_controller
          rightWheel_effort_controller"
   />
 

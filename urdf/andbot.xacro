@@ -44,8 +44,8 @@
           </horizontal>
         </scan>
         <range>
-          <min>0.10</min>
-          <max>3.0</max>
+          <min>0.20</min>
+          <max>1.5</max>
           <resolution>0.01</resolution>
         </range>
         <noise>
@@ -73,7 +73,7 @@
     <child link="ir_up"/>
     <origin xyz="${0.145/2} 0 ${0.875-0.029}" rpy="0 ${0/2} 0"/>
     <axis xyz="0 0 1"/>
-          <limit upper="1.57" lower="-1.57" velocity="50" effort="2"/>
+          <limit upper="1.57" lower="-1.57" velocity="50" effort="20"/>
 	  <joint_properties damping="0.0" friction="0"/> 
 
   </joint>
@@ -112,7 +112,7 @@
     <inertial>
       <mass value="0.2"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="0.1"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="0.005"/>
     </inertial>
   </link>
   <gazebo reference="ir_up">
@@ -144,8 +144,8 @@
           </horizontal>
         </scan>
         <range>
-          <min>0.10</min>
-          <max>3.0</max>
+          <min>0.20</min>
+          <max>1.50</max>
           <resolution>0.01</resolution>
         </range>
         <noise>
@@ -173,7 +173,7 @@
     <child link="ir_down"/>
     <origin xyz="${0.145/2} 0 ${0.275-0.029}" rpy="3.14 ${-1.57/2} 0"/>
     <axis xyz="0 0 1"/>
-          <limit upper="1.57" lower="-1.57" velocity="10" effort="7"/>
+          <limit upper="1.57" lower="-1.57" velocity="50" effort="2"/>
 	  <joint_properties damping="0.0" friction="0.0"/> 
 
   </joint>
@@ -211,9 +211,9 @@
 
     </visual>
     <inertial>
-      <mass value="0.002"/>
+      <mass value="0.2"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="0.01"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="0.005"/>
     </inertial>
   </link>
   <gazebo reference="ir_down">

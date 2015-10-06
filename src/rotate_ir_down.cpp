@@ -11,24 +11,24 @@
 int count = 0;
 double ir_position;
 void irCallback(const sensor_msgs::JointState& jointstate){
-	 ir_position= jointstate.position[2];	
+	 ir_position= jointstate.position[1];	
 }
 
 int main(int argc, char** argv){
- 	ros::init(argc, argv, "rotating_ir");
+ 	ros::init(argc, argv, "rotating_ir_down");
 	ros::NodeHandle n;
 	ros::Time current_time;
         std_msgs::Float64 ir_angle;
 	int flag = -1; //home
-	float Kp=2.0;
+	float Kp=15.0;
 
   	
- 	ros::Publisher ir_angle_cmd_pub = n.advertise<std_msgs::Float64>("/andbot/ir_up_position_controller/command", 50);
+ 	ros::Publisher ir_angle_cmd_pub = n.advertise<std_msgs::Float64>("/andbot/ir_down_velocity_controller/command", 50);
 	ros::Subscriber ir_angle_subscriber_;
 	ir_angle_subscriber_ = n.subscribe("/andbot/joint_states", 100, irCallback);
 
         float angle_cmd = 0;
-        ros::Rate r1(10);
+        ros::Rate r1(100);
 	while(n.ok()){
 		ROS_INFO("IR_POS %f,FLAG %d",ir_position,flag);
 		ROS_INFO("IR_CMD %f",Kp*(angle_cmd-ir_position));
