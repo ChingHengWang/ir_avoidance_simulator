@@ -127,8 +127,6 @@ target_link_libraries(rotate_ir_up ${catkin_LIBRARIES})
 
 add_executable(rotate_ir_down src/rotate_ir_down.cpp)
 target_link_libraries(rotate_ir_down ${catkin_LIBRARIES})
-add_executable(rotate_ir_up_P src/rotate_ir_up_P.cpp)
-target_link_libraries(rotate_ir_up_P ${catkin_LIBRARIES})
 
 
 #############

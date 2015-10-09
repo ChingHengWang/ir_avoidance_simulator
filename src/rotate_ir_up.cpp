@@ -9,7 +9,7 @@
 #include <tf/transform_broadcaster.h>
 #include <unistd.h>
 #include <math.h>
-
+#include <stdlib.h>
 double ir_position;
 double distance_scan;
 
@@ -24,9 +24,21 @@ int main(int argc, char** argv){
 	ros::NodeHandle n;
 	ros::Time current_time;
         std_msgs::Float64 ir_angle;
-	double dist[200];
+//	double dist[1000];
+//	double* Dist=(double*)malloc(10*sizeof(double));
+
 	int flag = -1; //home
 	float Kp=8.0;
+	if(argc>1){	
+	Kp=atof(argv[1]);
+	ROS_INFO("Kp %f",Kp);
+	}
+	else	
+	ROS_INFO("Kp %f",Kp);
+
+//	ROS_INFO("ARGC %d",argc);
+//	ROS_INFO("ARGV[1] %d",atoi(argv[1]));
+
  	ros::Publisher ir_angle_cmd_pub = n.advertise<std_msgs::Float64>("/andbot/ir_up_velocity_controller/command", 50);
 	ros::Subscriber ir_angle_subscriber_;
 	ir_angle_subscriber_ = n.subscribe("/andbot/joint_states", 100, ir_angle_Callback);
@@ -34,21 +46,18 @@ int main(int argc, char** argv){
 
 	sensor_msgs::PointCloud cloud;
 	cloud.points.resize(500);
-	cloud.header.frame_id = "head_link";
-
-	ros::Publisher ir_measure_pub = n.advertise<sensor_msgs::PointCloud>("ir_up_measure", 50);
+	cloud.header.frame_id = "ir_up_view";
+	cloud.channels.resize(1);
+	cloud.channels[0].name = "count";
+	cloud.channels[0].values.resize(500);
+	ros::Publisher ir_measure_pub = n.advertise<sensor_msgs::PointCloud>("ir_up_measure", 150);
 	ros::Subscriber ir_measure_dist_subscriber_;
 	ir_measure_dist_subscriber_ = n.subscribe("ir_up_dist", 100, ir_measure_dist_Callback);
-
-
-
-
-
 
   	
 	unsigned int count=0;
         float angle_cmd = 0;
-        ros::Rate r1(100);
+        ros::Rate r1(500);
 	while(n.ok()){
 		current_time = ros::Time::now();
 
@@ -70,22 +79,19 @@ int main(int argc, char** argv){
 		ros::spinOnce();
 		ir_angle.data=Kp*(angle_cmd-ir_position);
 		ir_angle_cmd_pub.publish(ir_angle);
-		dist[count] = distance_scan;
 		cloud.header.stamp = current_time;
-		 cloud.points[count].x = distance_scan*cos(ir_position);
-		 cloud.points[count].y = distance_scan*sin(ir_position);
-		 cloud.points[count].z = -distance_scan*sin(3.14/4);
-
-		ROS_INFO("COUNTER %d ,ANG %f,DIST %f",count,ir_position,dist[count]);
+		cloud.points[count].x = distance_scan*cos(ir_position);
+		cloud.points[count].y = distance_scan*sin(ir_position);
+		cloud.points[count].z = -distance_scan*sin(3.14/4);
+		cloud.points.resize(count+2);
+		ROS_INFO("1 COUNTER %d ,ANG %f,DIST %f,TIMER %f",count,ir_position,distance_scan,ros::Time::now().toSec());
 		count++;	
 
 		if(ir_position>=1.57*3/4){
 			flag=-1;
-		cloud.points.resize(count-1);
-
-                 ir_measure_pub.publish(cloud);
-
+                 	ir_measure_pub.publish(cloud);
 			count=0;
+
 			}
 
 		}
@@ -95,9 +101,24 @@ int main(int argc, char** argv){
 		ros::spinOnce();
 		ir_angle.data=Kp*(angle_cmd-ir_position);
 		ir_angle_cmd_pub.publish(ir_angle);
-		if(ir_position<=-1.57*3/4)
-			flag=1;
+		cloud.header.stamp = current_time;
+		cloud.points[count].x = distance_scan*cos(ir_position);
+		cloud.points[count].y = distance_scan*sin(ir_position);
+		cloud.points[count].z = -distance_scan*sin(3.14/4);
+		cloud.channels[0].values[count] = count;
 
+		cloud.points.resize(count+2);
+		cloud.channels[0].values.resize(count+2);
+	
+		ROS_INFO("-1 COUNTER %d ,ANG %f,DIST %f",count,ir_position,distance_scan);
+		count++;	
+
+		if(ir_position<=-1.57*3/4){
+			flag=1;
+                 	ir_measure_pub.publish(cloud);
+			count=0;
+
+			}
 		}
 		r1.sleep();
 

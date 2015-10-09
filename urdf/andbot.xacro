@@ -5,7 +5,8 @@
   <xacro:property name="radius_wheel" value="0.076"/>
   <xacro:property name="distance_between_wheels" value="0.3996"/>
   <xacro:property name="height_wheels_from_base" value="0.0392"/>
- 
+  <xacro:property name="ir_up_angle" value="0.78539"/> <!--PI /4 -->
+
  <arg name="gui" value="true"/>
   <!-- Base footprint link-->
   <link name="base_footprint"/>
@@ -71,7 +72,7 @@
   <joint name="ir_up_joint" type="continuous">
     <parent link="body_link"/>
     <child link="ir_up"/>
-    <origin xyz="${0.145/2} 0 ${0.875-0.029}" rpy="0 ${0/2} 0"/>
+    <origin xyz="${0.145/2} 0 ${0.875-0.029}" rpy="0 ${ir_up_angle} 0"/>
     <axis xyz="0 0 1"/>
           <limit upper="1.57" lower="-1.57" velocity="50" effort="20"/>
 	  <joint_properties damping="0.0" friction="0"/> 
@@ -116,6 +117,47 @@
     </inertial>
   </link>
   <gazebo reference="ir_up">
+    <mu1 value="5.0"/>
+    <mu2 value="5.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+  </gazebo>
+
+
+  <!-- Body link /ir up view joint -->
+  <joint name="ir_up_view_joint" type="fixed">
+    <parent link="body_link"/>
+    <child link="ir_up_view"/>
+    <origin xyz="${0.145/2} 0 ${0.875-0.029}" rpy="0 ${0/2} 0"/>
+  </joint>
+
+
+
+  <!-- ir_up_view -->
+  <link name="ir_up_view">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.0004" radius="0.0001"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.0004" radius="0.0001"/>
+      </geometry>
+       <material name="Yellow">
+         <color rgba="1 1 0 1"/>
+       </material>
+
+    </visual>
+    <inertial>
+      <mass value="0.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <gazebo reference="ir_up_view">
     <mu1 value="5.0"/>
     <mu2 value="5.0"/>
     <kp value="10000000.0"/>
@@ -171,7 +213,7 @@
   <joint name="ir_down_joint" type="continuous">
     <parent link="body_link"/>
     <child link="ir_down"/>
-    <origin xyz="${0.145/2} 0 ${0.275-0.029}" rpy="3.14 ${-1.57/2} 0"/>
+    <origin xyz="${0.145/2} 0 ${0.275-0.029}" rpy="0 -${ir_up_angle} 0"/>
     <axis xyz="0 0 1"/>
           <limit upper="1.57" lower="-1.57" velocity="50" effort="2"/>
 	  <joint_properties damping="0.0" friction="0.0"/> 
@@ -224,6 +266,45 @@
   </gazebo>
 
 
+  <!-- Body link /ir_down_view joint -->
+  <joint name="ir_down_view_joint" type="fixed">
+    <parent link="body_link"/>
+    <child link="ir_down_view"/>
+    <origin xyz="${0.145/2} 0 ${0.275-0.029}" rpy="0 0 0"/>
+  </joint>
+
+
+
+  <!-- ir_down_view -->
+  <link name="ir_down_view">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.0004" radius="0.0001"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 1.57 0"/>
+      <geometry>
+        <cylinder length="0.0004" radius="0.0001"/>
+      </geometry>
+       <material name="Yellow">
+         <color rgba="1 1 0 1"/>
+       </material>
+
+    </visual>
+    <inertial>
+      <mass value="0.0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+    </inertial>
+  </link>
+  <gazebo reference="ir_down_view">
+    <mu1 value="5.0"/>
+    <mu2 value="5.0"/>
+    <kp value="10000000.0"/>
+    <kd value="1.0"/>
+  </gazebo>
 
 
 
