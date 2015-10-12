@@ -128,6 +128,8 @@ target_link_libraries(rotate_ir_up ${catkin_LIBRARIES})
 add_executable(rotate_ir_down src/rotate_ir_down.cpp)
 target_link_libraries(rotate_ir_down ${catkin_LIBRARIES})
 
+add_executable(ir_tf_listener src/ir_tf_listener.cpp)
+target_link_libraries(ir_tf_listener ${catkin_LIBRARIES})
 
 #############
 ## Install ##
