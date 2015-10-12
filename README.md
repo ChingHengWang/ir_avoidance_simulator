@@ -1,5 +1,17 @@
 #ir_avoidance_simulator
 
+##add ir_tf_listener but still can not work
+* use waitForTransform and lookupTransform to know the tf between /ir_up_view and /ir_up
+
+		listener.waitForTransform("/ir_up_view", "/ir_up",ros::Time(0), ros::Duration(100.0));
+      
+		listener.lookupTransform("/ir_up_view", "/ir_up",ros::Time(0), transform);
+	
+
+
+
+
+##ir_up and ir_down sync detect object  ahead of and bot
 ###joint_state_controller/JointStateController
 * publish_rate raise to 100Hz can afford more detail motion control and data receive
 
